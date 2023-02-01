@@ -1,13 +1,14 @@
 node {
-    stage('CLEAN WORKSPACE'){
-        cleanWs()
+    stage('test'){
+        sh 'ls'
     }
     stage('GIT CLONE') { 
         git branch: 'main', credentialsId: 'GithubPassword', url: 'https://github.com/trickste/testrepo.git'
     }
     stage('PACKAGE') {
         withMaven(jdk: 'jdk', maven: 'maven') {
-            sh 'mvn clean package'
+            //sh 'mvn clean package'
+            echo "skip"
         }
     }
     stage('TESTING'){
@@ -15,7 +16,7 @@ node {
     }
     stage('COLLECT PACKAGE FILES') {
         echo "Creating Shopping package folder"
-        sh 'mkdir shopping_package'
+        sh 'mkdir -p shopping_package'
         sh 'cp Dockerfile shopping_package/'
         sh 'cp wfReportingConfig.yaml shopping_package/'
         sh 'cp shopping/app* shopping_package/'
