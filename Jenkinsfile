@@ -1,4 +1,7 @@
 node {
+    stage('CLEAN WORKSPACE'){
+        cleanWs()
+    }
     stage('GIT CLONE') { 
         git branch: 'main', credentialsId: 'GithubPassword', url: 'https://github.com/trickste/testrepo.git'
     }
