@@ -22,7 +22,7 @@ node {
     stage('COLLECT PACKAGE FILES') {
         echo "Creating Shopping package folder"
         sh 'mkdir -p shopping_package'
-        sh 'cp {wfReportingConfig.yaml,shopping/app*,shopping/target/shopping-0.9.0-SNAPSHOT.jar} shopping_package/'
+        sh 'cp ./{wfReportingConfig.yaml,shopping/app*,shopping/target/shopping-0.9.0-SNAPSHOT.jar} shopping_package/'
         git branch: 'shopping', credentialsId: 'GithubPassword', url: 'https://github.com/trickste/deployment.git'        
         sh 'cp Dockerfile shopping_package/'
         sh 'ls shopping_package/'
