@@ -40,13 +40,14 @@ node {
         }
     }
     stage('PUSH CREATED IMAGE'){
-        // withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
-        //     sh '''
-        //         docker login -u "${username}" -p "${password}"
-        //     '''
-        // }
-        withDockerRegistry(credentialsId: 'DockerHub', url: 'https://registry-1.docker.io/v2/') {
-            sh 'docker push tricksterepo/shopping'
+        withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
+            sh '''
+                echo ${password} | docker login -u "${username}" -password-stdin
+                docker push tricksterepo/shopping    
+            '''
         }
+        // withDockerRegistry(credentialsId: 'DockerHub', url: 'https://registry-1.docker.io/v2/') {
+        //     sh 'docker push tricksterepo/shopping'
+        // }
     }
 }
