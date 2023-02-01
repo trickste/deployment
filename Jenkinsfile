@@ -30,19 +30,24 @@ node {
         sh 'ls shopping_package/'
     }
     stage('DOCKERIZE'){
-        withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
-            sh '''
-                docker login -u "${username}" -p "${password}"
-            '''
+        // withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
+        //     sh '''
+        //         docker login -u "${username}" -p "${password}"
+        //     '''
+        // }
+        withDockerRegistry(credentialsId: 'DockerHub', url: 'https://registry-1.docker.io/v2/') {
+            sh 'docker image build -t tricksterepo/shopping .'
         }
-        sh 'docker image build -t tricksterepo/shopping .'
     }
     stage('PUSH CREATED IMAGE'){
-        withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
-            sh '''
-                docker login -u "${username}" -p "${password}"
-            '''
+        // withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
+        //     sh '''
+        //         docker login -u "${username}" -p "${password}"
+        //     '''
+        // }
+        withDockerRegistry(credentialsId: 'DockerHub', url: 'https://registry-1.docker.io/v2/') {
+        {
+            sh 'docker push tricksterepo/shopping'
         }
-        sh 'docker push tricksterepo/shopping'
     }
 }
