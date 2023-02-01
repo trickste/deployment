@@ -35,7 +35,9 @@ node {
         //         docker login -u "${username}" -p "${password}"
         //     '''
         // }
+        dir('shopping_package') {
             sh 'docker image build -t tricksterepo/shopping .'
+        }
     }
     stage('PUSH CREATED IMAGE'){
         // withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
