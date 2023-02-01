@@ -46,7 +46,6 @@ node {
         //     '''
         // }
         withDockerRegistry(credentialsId: 'DockerHub', url: 'https://registry-1.docker.io/v2/') {
-        {
             sh 'docker push tricksterepo/shopping'
         }
     }
