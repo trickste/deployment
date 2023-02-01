@@ -1,4 +1,9 @@
 node {
+    /*
+    stage('CLEAN WORKSPACE'){
+        cleanWs()
+    }
+    */
     stage('test'){
         sh 'ls'
     }
@@ -12,15 +17,14 @@ node {
         }
     }
     stage('TESTING'){
-
+        echo "run mvn tests and check through gates"
     }
     stage('COLLECT PACKAGE FILES') {
         echo "Creating Shopping package folder"
         sh 'mkdir -p shopping_package'
+        sh 'cp {wfReportingConfig.yaml,shopping/app*,shopping/target/shopping-0.9.0-SNAPSHOT.jar} shopping_package/'
+        git branch: 'shopping', credentialsId: 'GithubPassword', url: 'https://github.com/trickste/deployment.git'        
         sh 'cp Dockerfile shopping_package/'
-        sh 'cp wfReportingConfig.yaml shopping_package/'
-        sh 'cp shopping/app* shopping_package/'
-        sh 'cp shopping/target/shopping-0.9.0-SNAPSHOT.jar shopping_package/'
         sh 'ls shopping_package/'
     }
     stage('DOCKERIZE'){
