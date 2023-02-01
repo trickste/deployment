@@ -42,7 +42,7 @@ node {
     stage('PUSH CREATED IMAGE'){
         withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
             sh '''
-                echo ${password} | docker login -u "${username}" -password-stdin
+                echo ${password} | docker login -u "${username}" --password-stdin
                 docker push tricksterepo/shopping    
             '''
         }
