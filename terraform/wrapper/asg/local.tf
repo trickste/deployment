@@ -1,4 +1,10 @@
 locals {
+  test-app_sg_tags = {
+    component   = "application"
+    type        = "sg"
+    environment = "test"
+    terraform   = "true"
+  }
   test-app_asg_tags = {
     component   = "application"
     type        = "asg"
