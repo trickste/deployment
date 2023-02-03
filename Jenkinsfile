@@ -5,28 +5,40 @@ node {
     stage('GIT CLONE') { 
         git branch: 'application_deployment', credentialsId: 'GithubPassword', url: 'https://github.com/trickste/deployment.git'        
     }
-    stage('PACKAGE') {
-        withMaven(jdk: 'jdk', maven: 'maven') {
-            sh 'mvn clean package'
+    stage('UPDATE DOCKER COMPOSE'){
+        sh """
+            sed -i \'s|{{ version }}|${version}|g\' ./packer/ansible/test-app/files/docker-compose.yml
+        """
+    }
+    stage('PACKER TEST'){
+        dir('packer') {
+            sh """
+                packer init .
+                packer fmt .
+            """
         }
     }
-    stage('TESTING'){
-        echo "run mvn tests and check through gates"
-    }
-    stage('COLLECT PACKAGE FILES') {
-        echo "Creating delivery package folder"
-    }
-    stage('DOCKERIZE'){
-        dir('delivery_package') {
-            sh 'docker image build -t tricksterepo/delivery .'
+    stage('PACKER CREATE APPLICATION AMI'){
+        dir('packer') {
+            sh """
+                packer build source.pkr.hcl
+            """
         }
     }
-    stage('PUSH CREATED IMAGE'){
-        withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
-            sh '''
-                echo ${password} | docker login -u "${username}" --password-stdin
-                docker push tricksterepo/delivery    
-            '''
+    stage('Terraform CODE TEST TEMPLATE'){
+        dir("terraform/wrapper/asg"){
+            sh """
+                terraform init
+                terraform fmt
+                terraform validate
+            """
+        }
+    }
+    stage('Terraform CODE TEST TEMPLATE'){
+        dir("terraform/wrapper/asg"){
+            sh """
+                terraform apply -auto-approve
+            """
         }
     }
 }
