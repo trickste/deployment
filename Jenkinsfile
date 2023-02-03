@@ -14,25 +14,25 @@ node {
         echo "run mvn tests and check through gates"
     }
     stage('COLLECT PACKAGE FILES') {
-        echo "Creating Shopping package folder"
-        sh 'mkdir -p shopping_package'
-        sh 'cp wfReportingConfig.yaml shopping_package/'
-        sh 'cp shopping/app* shopping_package/'
-        sh 'cp shopping/target/shopping-0.9.0-SNAPSHOT.jar shopping_package/'
-        git branch: 'shopping', credentialsId: 'GithubPassword', url: 'https://github.com/trickste/deployment.git'        
-        sh 'cp Dockerfile shopping_package/'
-        sh 'ls shopping_package/'
+        echo "Creating styling package folder"
+        sh 'mkdir -p styling_package'
+        sh 'cp wfReportingConfig.yaml styling_package/'
+        sh 'cp styling/app* styling_package/'
+        sh 'cp styling/target/styling-0.9.0-SNAPSHOT.jar styling_package/'
+        git branch: 'styling', credentialsId: 'GithubPassword', url: 'https://github.com/trickste/deployment.git'        
+        sh 'cp Dockerfile styling_package/'
+        sh 'ls styling_package/'
     }
     stage('DOCKERIZE'){
-        dir('shopping_package') {
-            sh 'docker image build -t tricksterepo/shopping .'
+        dir('styling_package') {
+            sh 'docker image build -t tricksterepo/styling .'
         }
     }
     stage('PUSH CREATED IMAGE'){
         withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
             sh '''
                 echo ${password} | docker login -u "${username}" --password-stdin
-                docker push tricksterepo/shopping    
+                docker push tricksterepo/styling    
             '''
         }
     }
