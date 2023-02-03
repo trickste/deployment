@@ -14,25 +14,25 @@ node {
         echo "run mvn tests and check through gates"
     }
     stage('COLLECT PACKAGE FILES') {
-        echo "Creating printing package folder"
-        sh 'mkdir -p printing_package'
-        sh 'cp wfReportingConfig.yaml printing_package/'
-        sh 'cp printing/app* printing_package/'
-        sh 'cp printing/target/printing-0.9.0-SNAPSHOT.jar printing_package/'
-        git branch: 'printing', credentialsId: 'GithubPassword', url: 'https://github.com/trickste/deployment.git'        
-        sh 'cp Dockerfile printing_package/'
-        sh 'ls printing_package/'
+        echo "Creating packaging package folder"
+        sh 'mkdir -p packaging_package'
+        sh 'cp wfReportingConfig.yaml packaging_package/'
+        sh 'cp packaging/app* packaging_package/'
+        sh 'cp packaging/target/packaging-0.9.0-SNAPSHOT.jar packaging_package/'
+        git branch: 'packaging', credentialsId: 'GithubPassword', url: 'https://github.com/trickste/deployment.git'        
+        sh 'cp Dockerfile packaging_package/'
+        sh 'ls packaging_package/'
     }
     stage('DOCKERIZE'){
-        dir('printing_package') {
-            sh 'docker image build -t tricksterepo/printing .'
+        dir('packaging_package') {
+            sh 'docker image build -t tricksterepo/packaging .'
         }
     }
     stage('PUSH CREATED IMAGE'){
         withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
             sh '''
                 echo ${password} | docker login -u "${username}" --password-stdin
-                docker push tricksterepo/printing    
+                docker push tricksterepo/packaging    
             '''
         }
     }
