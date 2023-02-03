@@ -23,6 +23,7 @@ source "amazon-ebs" "goldenami" {
   source_ami                  = data.amazon-ami.source_ami.id
   vpc_id                      = var.vpc_id
   subnet_id                   = var.subnet_id
+  force_deregister            = true
   associate_public_ip_address = true
   communicator                = "ssh"
   ssh_username                = var.username
