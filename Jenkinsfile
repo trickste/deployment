@@ -1,19 +1,13 @@
 node {
-    /*
     stage('CLEAN WORKSPACE'){
         cleanWs()
-    }
-    */
-    stage('test'){
-        sh 'ls'
     }
     stage('GIT CLONE') { 
         git branch: 'main', credentialsId: 'GithubPassword', url: 'https://github.com/trickste/testrepo.git'
     }
     stage('PACKAGE') {
         withMaven(jdk: 'jdk', maven: 'maven') {
-            //sh 'mvn clean package'
-            echo "skip"
+            sh 'mvn clean package'
         }
     }
     stage('TESTING'){
@@ -30,11 +24,6 @@ node {
         sh 'ls shopping_package/'
     }
     stage('DOCKERIZE'){
-        // withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
-        //     sh '''
-        //         docker login -u "${username}" -p "${password}"
-        //     '''
-        // }
         dir('shopping_package') {
             sh 'docker image build -t tricksterepo/shopping .'
         }
@@ -46,8 +35,5 @@ node {
                 docker push tricksterepo/shopping    
             '''
         }
-        // withDockerRegistry(credentialsId: 'DockerHub', url: 'https://registry-1.docker.io/v2/') {
-        //     sh 'docker push tricksterepo/shopping'
-        // }
     }
 }
