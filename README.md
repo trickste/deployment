@@ -8,3 +8,4 @@ This repo contains the following branches having Jenkinsfile pipelines:
 - shopping: CI for shopping application
 - styling: CI for styling application
 - application_deployment: CD for Application by creating Launchtemplate that triggers instance refresh for the Autoscaling group
+- setup_architecture: Automation pipeline script for setting up architecture 
