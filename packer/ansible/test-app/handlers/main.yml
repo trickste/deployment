@@ -1,0 +1,27 @@
+---
+# handlers file for test-app
+- name: Start Docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+    daemon-reload: yes
+
+- name: Start awslogsd
+  service:
+    name: awslogsd
+    state: started
+    enabled: yes
+    daemon-reload: yes
+
+- name: Start Nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+    daemon-reload: yes
+
+- name: Restart Nginx
+  service:
+    name: nginx
+    state: restarted

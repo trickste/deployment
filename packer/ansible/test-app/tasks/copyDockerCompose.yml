@@ -1,0 +1,5 @@
+---
+- name: Copy Docker compose file to the server
+  copy:
+    src: docker-compose.yml
+    dest: /usr/lib/docker-compose.yml

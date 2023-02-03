@@ -1,0 +1,13 @@
+---
+# tasks file for test-app
+- name: Install docker
+  include_tasks: docker.yml
+
+- name: Install AWS Cloudwatch agent
+  include_tasks: cloudwatchAgent.yml
+
+- name: Move docker-compose to application server
+  include_tasks: copyDockerCompose.yml
+
+- name: Setup nginx
+  include_tasks: nginx.yml

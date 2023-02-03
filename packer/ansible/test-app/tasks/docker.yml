@@ -1,0 +1,29 @@
+---
+- name: Download Docker package on CENTOS
+  get_url:
+    url: https://get.docker.com 
+    dest: /tmp/get-docker.sh
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Execute Docker installation script on CENTOS
+  shell: bash /tmp/get-docker.sh
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: install docker on AMAZON LINUX
+  shell: amazon-linux-extras install docker -y
+  notify:
+    - Start Docker
+#  when: ansible_distribution == "Amazon" and ansible_distribution_major_version == "NA"
+
+- name: Add user to docker group
+  user:
+    name: ec2-user
+    groups: docker
+    append: yes
+
+- name: Get Docker-Compose binary
+  get_url:
+    url: https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: 775
+

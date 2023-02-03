@@ -1,0 +1,25 @@
+---
+- name: Setup log directory structure
+  file:
+    path: '/var/log/{{ item }}'
+    state: directory
+  loop:
+    - test-app/
+    - test-app/delivery
+    - test-app/packaging
+    - test-app/printing
+    - test-app/shopping
+    - test-app/styling
+
+- name: Install Cloudwatch log agent
+  yum:
+    name: awslogs
+  notify: Start awslogsd
+
+- name: Copy configurations file for Logs Agent
+  copy:
+    src: '{{ item.source }}'
+    dest: '{{ item.destination }}'
+  loop:
+    - {source: 'awslogs.conf', destination: '/etc/awslogs/awslogs.conf'}
+    - {source: 'awscli.conf', destination: '/etc/awslogs/awscli.conf'} 

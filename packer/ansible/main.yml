@@ -1,0 +1,8 @@
+- hosts: all
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Configure Vim using role
+      import_role:
+        name: test-app

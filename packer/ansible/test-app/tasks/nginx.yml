@@ -1,0 +1,12 @@
+---
+- name: Install nginx on AMAZON LINUX
+  shell: amazon-linux-extras install nginx1 -y
+  notify:
+    - Start Nginx
+
+- name: Copy configuration file
+  copy:
+    src: test-app.conf
+    dest: /etc/nginx/conf.d/test-app.conf
+  notify:
+    - Restart Nginx

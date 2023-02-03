@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  shopping:
+    image: tricksterepo/shopping:{{ version }}
+    network_mode: "host"
+    volumes:
+      - type: bind
+        source: /var/log/test-app/shopping/
+        target: /var/log/shopping/
+  styling:
+    image: tricksterepo/styling:{{ version }}
+    network_mode: "host"
+    volumes:
+      - type: bind
+        source: /var/log/test-app/styling/
+        target: /var/log/styling/
+  printing:
+    image: tricksterepo/printing:{{ version }}
+    network_mode: "host"
+    volumes:
+      - type: bind
+        source: /var/log/test-app/printing/
+        target: /var/log/printing/
+  packaging:
+    image: tricksterepo/packaging:{{ version }}
+    network_mode: "host"
+    volumes:
+      - type: bind
+        source: /var/log/test-app/packaging/
+        target: /var/log/packaging/
+  delivery:
+    image: tricksterepo/delivery:{{ version }}
+    network_mode: "host"
+    volumes:
+      - type: bind
+        source: /var/log/test-app/delivery/
+        target: /var/log/delivery/
