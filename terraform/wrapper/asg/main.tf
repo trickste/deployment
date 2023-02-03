@@ -1,3 +1,36 @@
+module "test-app_sg" {
+  source = "../../modules/sg/"
+  name   = "${local.test-app_sg_tags.component}-${local.test-app_sg_tags.type}-${local.test-app_sg_tags.environment}"
+  vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      description = "allow ssh"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 9000
+      to_port     = 9000
+      protocol    = "tcp"
+      description = "allow ssh"
+      cidr_blocks = "0.0.0.0/0"
+    }
+  ]
+  egress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      description = "outbound rule public"
+      cidr_blocks = "0.0.0.0/0"
+    }
+  ]
+  tags = local.test-app_sg_tags
+}
+
+
 module "test-app_autoscaling_group" {
   source                    = "../../modules/asg"
   name                      = "${local.test-app_asg_tags.component}-${local.test-app_asg_tags.type}-${local.test-app_asg_tags.environment}"
